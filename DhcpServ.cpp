@@ -236,7 +236,7 @@ public:
             vector<wstring> vKeys = conf.get(strSection);
             if (vKeys.size() > 0)
             {
-                auto itRet = m_maConfig.emplace(string(begin(strSection), end(strSection)), CONFIG());
+                auto itRet = m_maConfig.emplace(wstring_convert<codecvt_utf8<wchar_t>, wchar_t>().to_bytes(strSection), CONFIG());
                 if (itRet.second == true)
                 {
                     for (const auto& strKey : vKeys)
