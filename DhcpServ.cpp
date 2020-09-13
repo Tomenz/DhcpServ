@@ -401,9 +401,9 @@ public:
                 pair<map<UdpSocket*, SOCKET_ENTRY>::iterator, bool>paRet = m_maSockets.emplace(new UdpSocket(), SOCKET_ENTRY({ adrFamily, strIpAddr, nInterfaceIndex }));
                 if (paRet.second == true)
                 {
-                    paRet.first->first->BindErrorFunction(bind(&DhcpServer::SocketError, this, _1));
-                    paRet.first->first->BindCloseFunction(bind(&DhcpServer::SocketCloseing, this, _1));
-                    paRet.first->first->BindFuncBytesReceived(bind(&DhcpServer::DatenEmpfangen, this, _1));
+                    paRet.first->first->BindErrorFunction([&](BaseSocket* pBaseSocket) { SocketError(pBaseSocket); });
+                    paRet.first->first->BindCloseFunction([&](BaseSocket* pBaseSocket) { SocketCloseing(pBaseSocket); });
+                    paRet.first->first->BindFuncBytesReceived([&](UdpSocket* pUdpSocket) { DatenEmpfangen(pUdpSocket); });
 
                     if (paRet.first->first->Create(strIpAddr.c_str(), 67) == false || paRet.first->first->EnableBroadCast() == false)
                         wcout << L"Error creating Socket: " << strIpAddr.c_str() << endl;
@@ -448,12 +448,12 @@ public:
 
     void DatenEmpfangen(UdpSocket* pUdpSocket)
     {
-        uint32_t nAvalible = pUdpSocket->GetBytesAvailible();
+        size_t nAvalible = pUdpSocket->GetBytesAvailible();
 
         auto spBuffer = make_unique<unsigned char[]>(nAvalible + 1);
 
         string strFrom;
-        uint32_t nRead = pUdpSocket->Read(spBuffer.get(), nAvalible, strFrom);
+        size_t nRead = pUdpSocket->Read(spBuffer.get(), nAvalible, strFrom);
 
         if (nRead > 0)
         {
