@@ -1,4 +1,4 @@
-// DhcpServ.cpp : Definiert den Einstiegspunkt für die Konsolenanwendung.
+// DhcpServ.cpp : Definiert den Einstiegspunkt fÃ¼r die Konsolenanwendung.
 //
 
 #include <iostream>
@@ -113,7 +113,7 @@ public:
         {
             uint8_t cCode = *pOtionCode++;
             uint8_t cLen  = *pOtionCode++;
-//            OutputDebugString(wstring(L"Options-Code: " + to_wstring(cCode) + L", Länge: " + to_wstring(cLen) + L"\r\n").c_str());
+//            OutputDebugString(wstring(L"Options-Code: " + to_wstring(cCode) + L", LÃ¤nge: " + to_wstring(cLen) + L"\r\n").c_str());
             char caAddrBuf[INET6_ADDRSTRLEN + 1] = { 0 };
 
             switch (cCode)
@@ -214,7 +214,7 @@ public:
         m_strModulePath = wstring(FILENAME_MAX, 0);
 #if defined(_WIN32) || defined(_WIN64)
         if (GetModuleFileName(NULL, &m_strModulePath[0], FILENAME_MAX) > 0)
-            m_strModulePath.erase(m_strModulePath.find_last_of(L'\\') + 1); // Sollte der Backslash nicht gefunden werden wird der ganz String gelöscht
+            m_strModulePath.erase(m_strModulePath.find_last_of(L'\\') + 1); // Sollte der Backslash nicht gefunden werden wird der ganz String gelÃ¶scht
 
         if (_wchdir(m_strModulePath.c_str()) != 0)
             m_strModulePath = L"./";
@@ -448,7 +448,7 @@ public:
 
     void DatenEmpfangen(UdpSocket* pUdpSocket)
     {
-        size_t nAvalible = pUdpSocket->GetBytesAvailible();
+        size_t nAvalible = pUdpSocket->GetBytesAvailable();
 
         auto spBuffer = make_unique<unsigned char[]>(nAvalible + 1);
 
@@ -720,4 +720,3 @@ int main(int argc, const char* argv[])
 
     return 0;
 }
-
